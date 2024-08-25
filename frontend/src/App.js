@@ -26,7 +26,7 @@ function App() {
     }
     setError("");
     try {
-      const res = await fetch("http://localhost:8000/api/bfhl", {
+      const res = await fetch("https://bajajfinserve-21bct0275-code.onrender.com/api/bfhl", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
