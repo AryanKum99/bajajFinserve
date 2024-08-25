@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./App.css";
+import Select from 'react-select';
 
 function App() {
   const [input, setInput] = useState("");
@@ -17,6 +18,12 @@ function App() {
     }
   };
 
+  const options = [
+    { value: 'alphabets', label: 'Alphabets' },
+    { value: 'numbers', label: 'Numbers' },
+    { value: 'highest_lowercase_alphabet', label: 'Highest Lowercase Alphabet' }
+  ];
+
   // Function to handle the form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,7 +33,7 @@ function App() {
     }
     setError("");
     try {
-      const res = await fetch("https://bajajfinserve-21bct0275-code.onrender.com/api/bfhl", {
+      const res = await fetch(process.env.REACT_APP_BACKEND_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -41,11 +48,8 @@ function App() {
   };
 
   // Function to handle the selection from the dropdown
-  const handleDropdownChange = (e) => {
-    const options = Array.from(
-      e.target.selectedOptions,
-      (option) => option.value
-    );
+  const handleDropdownChange = (selectedOptions) => {
+    const options = selectedOptions ? selectedOptions.map(option => option.value) : [];
     setSelectedOptions(options);
   };
 
@@ -67,18 +71,11 @@ function App() {
         <>
           <div>
             <label htmlFor="responseOptions">Multi Filter</label>
-            <select
-              id="responseOptions"
-              multiple={true}
-              value={selectedOptions}
+            <Select
+              options={options}
+              isMulti={true}
               onChange={handleDropdownChange}
-            >
-              <option value="alphabets">Alphabets</option>
-              <option value="numbers">Numbers</option>
-              <option value="highest_lowercase_alphabet">
-                Highest Lowercase Alphabet
-              </option>
-            </select>
+            />
           </div>
 
           <div className="FilteredResponse">
@@ -96,9 +93,8 @@ function App() {
             )}
           </div>
         </>
-      )
-      }
-    </div >
+      )}
+    </div>
   );
 }
 
